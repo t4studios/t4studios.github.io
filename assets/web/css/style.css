@@ -1,0 +1,510 @@
+/* -------------------------------------------------------------------
+ * Global Variables & Resets
+ * ------------------------------------------------------------------- */
+:root {
+    --primary-font: 'Plus Jakarta Sans', sans-serif;
+    --secondary-font: 'Inter', sans-serif;
+    --bg-color: #121212;
+    --text-color: #f0f0f0;
+
+    /* Static Accent Color for highlighting */
+    --accent-color: #00bcd4;
+
+    /* Dynamic Accent Color for background/glow that changes */
+    --accent-color-dynamic: var(--accent-color);
+
+    /* Fixed Button colors - ALL NOW DEFAULT TO WHITE/TEXT-COLOR */
+    --button-bg: transparent;
+    --button-border: var(--text-color);
+    --button-text: var(--text-color);
+
+    /* Sidebar specific colors for solid look */
+    --sidebar-bg: #1e1e2d;
+    --option-hover-bg: #28283a;
+
+    /* New Color for Features Block Background - dark gray */
+    --feature-bg: #28283a;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* Disable all forms of user interaction and dragging for clean clock display */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+    cursor: default;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--secondary-font);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.5s ease;
+    cursor: default !important;
+}
+
+/* -------------------------------------------------------------------
+ * Main Clock Display & Animation
+ * ------------------------------------------------------------------- */
+.clock-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* 🔑 UPDATED: Wrapper to stack the clock and the date */
+#main-display-wrapper {
+    display: flex;
+    flex-direction: column;
+    /* Stack children vertically */
+    align-items: flex-start;
+    /* Align children to the left of the wrapper */
+}
+
+.clock {
+    /* Set initial opacity to 0 and apply the animation for a smooth entrance */
+    opacity: 0;
+    animation: slideIn 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+
+    font-family: var(--primary-font);
+    font-size: 10vw;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 10px var(--accent-color-dynamic);
+    transition: color 0.05s linear;
+}
+
+/* 🔑 UPDATED: Date Display Styling for the "below and right" offset */
+#date-display {
+    /* Slight invisible, slight big */
+    font-family: var(--secondary-font);
+    font-size: 2.5vw;
+    font-weight: 400;
+    opacity: 0.15;
+    color: var(--text-color);
+
+    /* 🔑 New positioning for "under and to the right" */
+    align-self: flex-end;
+    /* Push the date text to the right side of the main clock */
+    margin-top: -1.5vw;
+    /* Pull it up slightly closer to the clock text */
+    margin-right: 0.5vw;
+    /* Small offset from the right edge for spacing */
+
+    transition: opacity 0.3s ease;
+}
+
+#date-display:hover {
+    opacity: 0.5;
+}
+
+/* Clock Entrance Animation */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+        /* Start 50px to the left */
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        /* End at the center */
+    }
+}
+
+
+/* -------------------------------------------------------------------
+ * Taskbar & Buttons
+ * ------------------------------------------------------------------- */
+.taskbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: opacity 0.3s;
+}
+
+.options-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--button-bg);
+    border: 2px solid var(--button-border);
+    border-radius: 50%;
+    color: var(--button-text);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    outline: none;
+    z-index: 10;
+}
+
+.options-btn:hover {
+    background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+}
+
+.arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+/* Hide taskbar elements when sidebar is open or in fullscreen */
+.sidebar.open~.taskbar #toggle-sidebar,
+:fullscreen #toggle-sidebar,
+:fullscreen #toggle-fullscreen {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* -------------------------------------------------------------------
+ * Sidebar (Options)
+ * ------------------------------------------------------------------- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    /* Hidden position */
+    width: 280px;
+    height: 100vh;
+
+    background-color: var(--sidebar-bg);
+    border-radius: 0 15px 15px 0;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    padding: 20px;
+    transition: left 0.4s cubic-bezier(0.17, 0.84, 0.44, 1);
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+    /* Visible position */
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 0;
+}
+
+.sidebar-header h2 {
+    color: var(--accent-color);
+    font-family: var(--primary-font);
+    text-shadow: none;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: var(--accent-color);
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 15px 10px;
+    border-radius: 8px;
+    border-bottom: none;
+    transition: background-color 0.2s;
+}
+
+.option-group:hover {
+    background-color: var(--option-hover-bg);
+}
+
+.option-label {
+    font-size: 1em;
+    font-weight: 400;
+    color: var(--text-color);
+}
+
+/* Toggle Switch styles (Smaller/Compact) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #404040;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #ffffff;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--accent-color);
+}
+
+input:checked+.slider:before {
+    transform: translateX(18px);
+    background-color: #ffffff;
+}
+
+.slider.round {
+    border-radius: 22px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* -------------------------------------------------------------------
+ * Time Zone Features List
+ * ------------------------------------------------------------------- */
+#features-list {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 50;
+
+    /* Subtle opacity */
+    opacity: 0.2;
+    transition: opacity 0.3s ease;
+}
+
+#features-list:hover {
+    opacity: 0.8;
+    /* Reveal on hover */
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Default: Dark gray background */
+    background-color: var(--feature-bg);
+    border-radius: 12px;
+    padding: 10px 15px;
+    min-width: 60px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease;
+}
+
+/* Class to apply when the background color animation is ACTIVE */
+.feature-item.color-active {
+    /* Use the dynamic accent color with high transparency */
+    background-color: color-mix(in srgb, var(--accent-color-dynamic) 30%, transparent);
+}
+
+.feature-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 2px;
+}
+
+.feature-time {
+    font-family: var(--primary-font);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-color);
+}
+
+.current-time-item {
+    cursor: default;
+    border: none;
+}
+
+
+/* -------------------------------------------------------------------
+ * Footer & Synchronization Info
+ * ------------------------------------------------------------------- */
+/* Positioning changed to bottom-left */
+#sync-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+
+    color: var(--text-color);
+    font-size: 0.8rem;
+    font-family: var(--secondary-font);
+    opacity: 0.15;
+    transition: opacity 0.3s;
+    z-index: 5;
+}
+
+:fullscreen #sync-info {
+    opacity: 0.15;
+}
+
+.footer {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-color);
+    opacity: 0.15;
+    font-family: var(--secondary-font);
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.footer a {
+    color: var(--text-color);
+    text-decoration: underline;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.footer a:hover {
+    text-decoration: none;
+    color: var(--accent-color);
+}
+
+.footer:hover {
+    opacity: 0.8;
+}
+
+:fullscreen .footer {
+    opacity: 0.1;
+    /* Keep it very subtle in fullscreen */
+}
+
+/* -------------------------------------------------------------------
+ * Fullscreen Hint
+ * ------------------------------------------------------------------- */
+#fullscreen-exit-hint {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--secondary-font);
+    font-size: 1.5rem;
+    color: var(--text-color);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 5;
+}
+
+:fullscreen #fullscreen-exit-hint {
+    opacity: 0.15;
+}
+
+/* -------------------------------------------------------------------
+ * License Modal
+ * ------------------------------------------------------------------- */
+#license-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-color);
+    z-index: 2000;
+    /* Ensure it is on top of everything */
+    display: flex;
+    flex-direction: column;
+
+    /* Initially hidden and animated */
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.95);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+#license-modal.open {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.modal-taskbar {
+    width: 100%;
+    height: 50px;
+    background-color: var(--feature-bg);
+    /* Use a darker color for contrast */
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+    /* Prevent the taskbar from shrinking */
+}
+
+.modal-title {
+    font-family: var(--primary-font);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--accent-color);
+}
+
+#license-content {
+    flex-grow: 1;
+    /* Take up remaining space */
+    padding: 20px;
+    margin: 0;
+    overflow-y: auto;
+    /* Enable scrolling for long content */
+    white-space: pre-wrap;
+    /* Preserve formatting but wrap long lines */
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--text-color);
+}

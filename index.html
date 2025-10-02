@@ -1,14 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClockLive</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/web/css/style.css">
+
+    </head>
+
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+    <div class="taskbar">
+        <button id="toggle-sidebar" class="options-btn">
+            <span class="arrow">→</span>
+        </button>
+        <button id="toggle-fullscreen" class="options-btn">
+            <span title="Toggle Fullscreen">⛶</span>
+        </button>
+    </div>
+
+    <div id="features-list">
+        <div class="feature-item current-time-item">
+            <span class="feature-label" id="tz-local-label">Current Time (Loading)</span>
+            <span id="tz-local" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">EDT</span>
+            <span id="tz-edt" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">CDT</span>
+            <span id="tz-cdt" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">MDT</span>
+            <span id="tz-mdt" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">PDT</span>
+            <span id="tz-pdt" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">UTC / GMT</span>
+            <span id="tz-utc" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">CET (Europe)</span>
+            <span id="tz-cet" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">Beijing</span>
+            <span id="tz-asia-beijing" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">London (BST)</span>
+            <span id="tz-europe-london" class="feature-time">00:00:00</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-label">India (IST)</span>
+            <span id="tz-asia-kolkata" class="feature-time">00:00:00</span>
+        </div>
+    </div>
+    <div class="clock-container">
+        <div id="main-display-wrapper">
+            <div id="live-clock" class="clock">
+                <span id="time-hms">12:00:00</span>
+                <span id="time-ampm"> AM</span>
+            </div>
+            <div id="date-display">
+                Thursday, January 1, 1970
+            </div>
+        </div>
+    </div>
+    <div id="sync-info"></div>
+    
+    <div id="ad-container-main" style="text-align: center; margin: 20px 0;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2851265996786440"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-2851265996786440"
+             data-ad-slot="4241795316"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div id="fullscreen-exit-hint">
+        Press anywhere to exit fullscreen.
+    </div>
+
+    <div id="license-modal">
+        <div class="modal-taskbar">
+            <span class="modal-title">LICENSE: ClockLive</span>
+            <button id="close-license-modal" class="options-btn close-btn">
+                &times;
+            </button>
+        </div>
+        <pre id="license-content">Loading License...</pre>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Options</h2>
+            <button id="close-sidebar" class="close-btn">
+                &times;
+            </button>
+        </div>
+
+        <div class="option-group">
+            <span class="option-label">Use 24hr Clock</span>
+            <label class="switch">
+                <input type="checkbox" id="toggle-24hr">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <div class="option-group">
+            <span class="option-label">Animate Background Color</span>
+            <label class="switch">
+                <input type="checkbox" id="toggle-color-effect">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+
+    <script src="assets/web/js/save.js"></script>
+    <script src="assets/web/js/console.js"></script>
+    <script src="assets/web/js/clock.js" type="module"></script>
+    <script src="assets/web/js/main.js?v=101" type="module"></script> 
+    <footer class="footer">
+      <p>Copyright 2025, T4Studio. All Rights Reserved. | 
+      <span class="version-text" id="version-display"></span> | 
+      <a href="#" id="open-license-link">License</a></p>
+    </footer>
 </body>
 </html>
