@@ -508,3 +508,43 @@ input:checked+.slider:before {
     line-height: 1.4;
     color: var(--text-color);
 }
+
+/* -------------------------------------------------------------------
+ * Main Clock Display & Animation
+ * ------------------------------------------------------------------- */
+ .clock-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    /* 🔑 ADDED: Crucial for positioning the hint relative to the clock center */
+    position: relative; 
+}
+/* ... rest of the main clock display styles ... */
+
+/* -------------------------------------------------------------------
+ * Fullscreen Hint
+ * ------------------------------------------------------------------- */
+#fullscreen-exit-hint {
+    /* 🔑 CHANGED: Position relative to the clock-container (its new parent) */
+    position: absolute; 
+    /* 🔑 ADJUSTED: Move the hint up to be above the clock face */
+    top: 40%; /* Adjusted from 35% to 40% for better spacing */
+    
+    /* Center the element horizontally */
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    
+    font-family: var(--secondary-font);
+    font-size: 1.5rem;
+    color: var(--text-color);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 5;
+}
+
+:fullscreen #fullscreen-exit-hint {
+    opacity: 0.15;
+}
