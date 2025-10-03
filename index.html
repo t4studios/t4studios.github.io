@@ -143,7 +143,10 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2851265996786440"
          crossorigin="anonymous"></script>
     <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
+         // Delay the ad push slightly to ensure the DOM is ready and stable
+         setTimeout(function() {
+             (adsbygoogle = window.adsbygoogle || []).push({});
+         }, 100); 
     </script>
 </body>
 </html>
